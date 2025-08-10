@@ -17,18 +17,19 @@ def create_user(db: Session, user: UserCreate):
 def get_notes(db: Session, user_id: int, skip: int = 0, limit: int = 100):
     return db.query(Note).filter(Note.owner_id == user_id).offset(skip).limit(limit).all()
 
+
 def get_note(db: Session, note_id: int):
     return db.query(Note).filter(Note.id == note_id).first()
 
 def create_user_note(db: Session, note: NoteCreate, user_id: int):
-    db_note = Note(**note.dict(), owner_id=user_id)
+    db_note = Note(**note.model_dump(), owner_id=user_id)
     db.add(db_note)
     db.commit()
     db.refresh(db_note)
     return db_note
 
 def update_note(db: Session, note: NoteUpdate, db_note: Note):
-    for key, value in note.dict(exclude_unset=True).items():
+    for key, value in note.model_dump(exclude_unset=True).items():
         setattr(db_note, key, value)
     db.add(db_note)
     db.commit()

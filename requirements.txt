@@ -4,3 +4,6 @@ SQLAlchemy
 python-jose
 passlib
 python-dotenv
+bcrypt
+pydantic
+dotenv

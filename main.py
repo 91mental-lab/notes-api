@@ -1,8 +1,7 @@
 from fastapi import FastAPI
 from database import engine, Base
-from routers import users, notes # Пока не созданы, но добавим позже
+from routers import users, notes
 
-# Создаем таблицы в БД при старте приложения
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(

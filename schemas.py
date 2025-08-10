@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 class NoteBase(BaseModel):
     title: str
@@ -15,7 +15,7 @@ class Note(NoteBase):
     owner_id: int
 
     class Config:
-        orm_mode = True # Позволяет преобразовывать ORM-модели в Pydantic-модели
+        model_config = ConfigDict(from_attributes=True)
 
 class UserBase(BaseModel):
     username: str
@@ -28,4 +28,4 @@ class User(UserBase):
     notes: list[Note] = []
 
     class Config:
-        orm_mode = True
+        model_config = ConfigDict(from_attributes=True)
