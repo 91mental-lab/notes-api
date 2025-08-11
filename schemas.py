@@ -14,8 +14,7 @@ class Note(NoteBase):
     id: int
     owner_id: int
 
-    class Config:
-        model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True)
 
 class UserBase(BaseModel):
     username: str
@@ -27,5 +26,4 @@ class User(UserBase):
     id: int
     notes: list[Note] = []
 
-    class Config:
-        model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True)
