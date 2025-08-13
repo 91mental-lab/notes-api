@@ -1,7 +1,7 @@
 from pydantic import BaseModel, ConfigDict
 
 class NoteBase(BaseModel):
-    title: str
+    title: str | None = None
     content: str | None = None
 
 class NoteCreate(NoteBase):
