@@ -1,9 +1,11 @@
 import pytest
 from unittest.mock import MagicMock, patch
+from sqlalchemy.orm import Session
 
-from twisted.internet.defer import returnValue
+from src.schemas import UserCreate
+from src.models import User
 
-from ..crud import (
+from src.crud import (
     get_user_by_username,
     create_user,
     get_notes,
@@ -13,17 +15,18 @@ from ..crud import (
     delete_note
 )
 
-from ..models import User, Note
-from ..schemas import UserCreate, NoteCreate, NoteUpdate
+from src.models import User, Note
+from src.schemas import UserCreate, NoteCreate, NoteUpdate
 
 @pytest.fixture
 def mock_db_session():
-    return MagicMock()
+    mock_session = MagicMock(spec=Session)
+    return mock_session
 
 
 @pytest.fixture
 def mock_get_password_hash():
-    with patch('SecureNotesAPI.crud.get_password_hash', return_value="hashed_password") as mock_hash:
+    with patch('src.crud.get_password_hash', return_value="hashed_password") as mock_hash:
         yield mock_hash
 
 
@@ -46,15 +49,20 @@ def test_create_user(mock_db_session, mock_get_password_hash):
     mock_db_user_instance = MagicMock(spec=User)
     mock_db_user_instance.username = "newuser"
     mock_db_user_instance.hashed_password = "hashed_password"
-    mock_db_user_instance.id = 1
+    mock_db_user_instance.id = None
+
+    def add_side_effect(obj):
+        pass
 
     mock_db_session.add.side_effect = lambda x: None
     mock_db_session.refresh.side_effect = lambda x: setattr( x, "id", 1)
 
     user = create_user(mock_db_session, user_in)
 
+
     mock_get_password_hash.assert_called_once_with(user_in.password)
     mock_db_session.refresh.assert_called_once_with(mock_db_session.add.call_args[0][0])
+    mock_db_session.commit.assert_called_once()
 
     assert user.username == user_in.username
     assert user.hashed_password == "hashed_password"

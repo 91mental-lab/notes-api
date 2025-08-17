@@ -2,3 +2,4 @@
 .env
 notes.db
 .idea
+__pycache__
