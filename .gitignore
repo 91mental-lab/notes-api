@@ -3,3 +3,7 @@
 notes.db
 .idea
 __pycache__
+.idea
+idea
+.DS_Store
+.git

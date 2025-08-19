@@ -1,8 +1,8 @@
+venv
 .git
 .gitignore
-.venv/
-__pycache__/
-*.pyc
-*.sqlite
-notes.db
 .env
+docker*.yml
+.gitlab-ci.yml
+.pre-commit-config.yaml
+.idea
